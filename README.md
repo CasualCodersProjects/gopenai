@@ -7,7 +7,7 @@ This is a super simple wrapper for OpenAI's GPT Completion, GPT Edits, and DALL-
 ## Installing
 
 ```
-go get -u github.com/CasualCodersProjects/gopenai.git
+go get -u github.com/CasualCodersProjects/gopenai
 ```
 
 ## Usage
