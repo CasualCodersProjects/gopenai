@@ -1,5 +1,6 @@
 package types
 
+// NewDefaultCompletionRequest returns a CompletionRequest with default values
 func NewDefaultCompletionRequest(prompt string) *CompletionRequest {
 	return &CompletionRequest{
 		Model:            "text-davinci-003",
@@ -19,6 +20,7 @@ func NewDefaultCompletionRequest(prompt string) *CompletionRequest {
 	}
 }
 
+// NewDefaultEditRequest returns a EditRequest with default values
 func NewDefaultEditRequest(input, instructions string) *EditRequest {
 	return &EditRequest{
 		Model:        "text-davinci-edit-001",
@@ -30,6 +32,7 @@ func NewDefaultEditRequest(input, instructions string) *EditRequest {
 	}
 }
 
+// NewDefaultImageRequest returns a ImageRequest with default values
 func NewDefaultImageRequest(prompt string) *ImageRequest {
 	return &ImageRequest{
 		Prompt:         prompt,

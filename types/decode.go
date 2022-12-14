@@ -6,6 +6,7 @@ import (
 	"io"
 )
 
+// DecodeModelsResponse decodes a response from the models endpoint
 func DecodeModelsResponse(body io.Reader) (ModelsResponse, error) {
 	var modelsResponse ModelsResponse
 	buf := new(bytes.Buffer)
@@ -15,6 +16,7 @@ func DecodeModelsResponse(body io.Reader) (ModelsResponse, error) {
 	return modelsResponse, err
 }
 
+// DecodeCompletionResponse decodes a response from the completion endpoint
 func DecodeCompletionResponse(body io.Reader) (CompletionResponse, error) {
 	var completionResponse CompletionResponse
 	buf := new(bytes.Buffer)
@@ -24,6 +26,7 @@ func DecodeCompletionResponse(body io.Reader) (CompletionResponse, error) {
 	return completionResponse, err
 }
 
+// DecodeEditResponse decodes a response from the edit endpoint
 func DecodeEditResponse(body io.Reader) (EditResponse, error) {
 	var editResponse EditResponse
 	buf := new(bytes.Buffer)
@@ -33,6 +36,7 @@ func DecodeEditResponse(body io.Reader) (EditResponse, error) {
 	return editResponse, err
 }
 
+// DecodeImageResponse decodes a response from the image endpoint
 func DecodeImageResponse(body io.Reader) (ImageResponse, error) {
 	var imageResponse ImageResponse
 	buf := new(bytes.Buffer)

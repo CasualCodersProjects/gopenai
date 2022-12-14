@@ -17,6 +17,7 @@ type OpenAIOpts struct {
 	APIKey string
 }
 
+// NewOpenAI creates a new instance of the OpenAI API
 func NewOpenAI(options *OpenAIOpts) OpenAI {
 	apiKey := options.APIKey
 	if apiKey == "" {
@@ -43,6 +44,7 @@ func (o *OpenAI) newRequest(method, url string, body io.Reader) (*http.Request, 
 	return req, nil
 }
 
+// ListModels returns a list of models
 func (o *OpenAI) ListModels() (types.ModelsResponse, error) {
 	req, err := o.newRequest("GET", "https://api.openai.com/v1/models", nil)
 	if err != nil {
@@ -57,6 +59,7 @@ func (o *OpenAI) ListModels() (types.ModelsResponse, error) {
 	return types.DecodeModelsResponse(resp.Body)
 }
 
+// CreateCompletion creates a completion
 func (o *OpenAI) CreateCompletion(completionRequest *types.CompletionRequest) (types.CompletionResponse, error) {
 	body, err := types.Encode(completionRequest)
 	if err != nil {
@@ -76,6 +79,7 @@ func (o *OpenAI) CreateCompletion(completionRequest *types.CompletionRequest) (t
 	return types.DecodeCompletionResponse(resp.Body)
 }
 
+// CreateEdit creates an edit
 func (o *OpenAI) CreateEdit(editRequest *types.EditRequest) (types.EditResponse, error) {
 	body, err := types.Encode(editRequest)
 	if err != nil {
@@ -95,6 +99,7 @@ func (o *OpenAI) CreateEdit(editRequest *types.EditRequest) (types.EditResponse,
 	return types.DecodeEditResponse(resp.Body)
 }
 
+// CreateImage creates an image
 func (o *OpenAI) CreateImage(imageRequest *types.ImageRequest) (types.ImageResponse, error) {
 	body, err := types.Encode(imageRequest)
 	if err != nil {
@@ -114,18 +119,18 @@ func (o *OpenAI) CreateImage(imageRequest *types.ImageRequest) (types.ImageRespo
 	return types.DecodeImageResponse(resp.Body)
 }
 
+// CreateCompletionSimple creates a completion with a simple interface
 func (o *OpenAI) CreateCompletionSimple(prompt, model string, maxTokens int) (types.CompletionResponse, error) {
-	if model == "" {
-		model = "text-davinci-003"
-	}
-	if maxTokens == 0 {
-		maxTokens = 256
-	}
-	completionRequest := types.CompletionRequest{
-		Prompt:    prompt,
-		Model:     model,
-		MaxTokens: maxTokens,
+
+	completionRequest := types.NewDefaultCompletionRequest(prompt)
+
+	if model != "" {
+		completionRequest.Model = model
 	}
 
-	return o.CreateCompletion(&completionRequest)
+	if maxTokens > 0 {
+		completionRequest.MaxTokens = maxTokens
+	}
+
+	return o.CreateCompletion(completionRequest)
 }

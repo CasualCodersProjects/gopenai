@@ -6,6 +6,7 @@ import (
 	"io"
 )
 
+// Encode encodes v into a reader
 func Encode(v interface{}) (io.Reader, error) {
 	// encode v into a reader using json
 	jsonBytes, err := json.Marshal(v)
