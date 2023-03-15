@@ -33,3 +33,23 @@ type ImageRequest struct {
 	ResponseFormat string `json:"response_format"`
 	User           string `json:"user"`
 }
+
+type ChatMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+// ChatRequest represents a request to the chat endpoint
+type ChatRequest struct {
+	Model            string        `json:"model"`
+	Messages         []ChatMessage `json:"messages"`
+	Temperature      float64       `json:"temperature"`
+	TopP             float64       `json:"top_p"`
+	N                int           `json:"n"`
+	Stream           bool          `json:"stream"`
+	Stop             []string      `json:"stop"`
+	MaxTokens        int           `json:"max_tokens"`
+	PresencePenalty  float64       `json:"presence_penalty"`
+	FrequencyPenalty float64       `json:"frequency_penalty"`
+	User             string        `json:"user"`
+}

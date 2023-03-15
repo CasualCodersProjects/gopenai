@@ -42,3 +42,25 @@ func NewDefaultImageRequest(prompt string) *ImageRequest {
 		User:           "",
 	}
 }
+
+// NewDefaultChatRequest returns a ChatRequest with default values
+func NewDefaultChatRequest(prompt string) *ChatRequest {
+	messages := []ChatMessage{
+		{Role: "system", Content: "You are a helpful assistant."},
+		{Role: "user", Content: prompt},
+	}
+
+	return &ChatRequest{
+		Model:            "gpt-3.5-turbo",
+		Messages:         messages,
+		Temperature:      1,
+		TopP:             1,
+		N:                1,
+		Stream:           false,
+		Stop:             nil,
+		MaxTokens:        1024,
+		PresencePenalty:  0,
+		FrequencyPenalty: 0,
+		User:             "",
+	}
+}

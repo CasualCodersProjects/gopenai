@@ -134,3 +134,34 @@ func (o *OpenAI) CreateCompletionSimple(prompt, model string, maxTokens int) (ty
 
 	return o.CreateCompletion(completionRequest)
 }
+
+// CreateChat creates a chat
+func (o *OpenAI) CreateChat(chatRequest *types.ChatRequest) (types.ChatResponse, error) {
+	body, err := types.Encode(chatRequest)
+	if err != nil {
+		return types.ChatResponse{}, err
+	}
+
+	req, err := o.newRequest("POST", "https://api.openai.com/v1/chat/completions", body)
+	if err != nil {
+		return types.ChatResponse{}, err
+	}
+
+	resp, err := o.Client.Do(req)
+	if err != nil {
+		return types.ChatResponse{}, err
+	}
+
+	return types.DecodeChatResponse(resp.Body)
+}
+
+// CreateChatSimple creates a chat with a simple interface
+func (o *OpenAI) CreateChatSimple(prompt string, maxTokens int) (types.ChatResponse, error) {
+	chatRequest := types.NewDefaultChatRequest(prompt)
+
+	if maxTokens > 0 {
+		chatRequest.MaxTokens = maxTokens
+	}
+
+	return o.CreateChat(chatRequest)
+}

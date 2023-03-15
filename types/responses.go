@@ -64,3 +64,18 @@ type ImageResponse struct {
 	Created int     `json:"created"`
 	Data    []Image `json:"data"`
 }
+
+type ChatResponseChoice struct {
+	Index        int         `json:"index"`
+	FinishReason string      `json:"finish_reason"`
+	Message      ChatMessage `json:"message"`
+}
+
+// ChatResponse response for a chat request
+type ChatResponse struct {
+	ID      string               `json:"id"`
+	Object  string               `json:"object"`
+	Created int                  `json:"created"`
+	Choices []ChatResponseChoice `json:"choices"`
+	Usage   Usage                `json:"usage"`
+}

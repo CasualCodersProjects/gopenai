@@ -74,3 +74,15 @@ func TestCreateImage(t *testing.T) {
 		t.Errorf("Expected image ID to be set, got %s", image.Data)
 	}
 }
+
+func TestCreateChat(t *testing.T) {
+	openai := NewOpenAI(&OpenAIOpts{})
+	chatRequest := types.NewDefaultChatRequest("The quick brown fox jumps over the lazy dog.")
+	chat, err := openai.CreateChat(chatRequest)
+	if err != nil {
+		t.Errorf("Expected no error, got %s", err)
+	}
+	if len(chat.Choices) != 1 {
+		t.Errorf("Expected chat choices to be 1, got %d", len(chat.Choices))
+	}
+}

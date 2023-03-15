@@ -45,3 +45,13 @@ func DecodeImageResponse(body io.Reader) (ImageResponse, error) {
 	err := json.Unmarshal(jsonBytes, &imageResponse)
 	return imageResponse, err
 }
+
+// DecodeChatResponse decodes a response from the chat endpoint
+func DecodeChatResponse(body io.Reader) (ChatResponse, error) {
+	var chatResponse ChatResponse
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(body)
+	jsonBytes := buf.Bytes()
+	err := json.Unmarshal(jsonBytes, &chatResponse)
+	return chatResponse, err
+}
