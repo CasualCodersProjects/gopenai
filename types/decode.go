@@ -55,3 +55,13 @@ func DecodeChatResponse(body io.Reader) (ChatResponse, error) {
 	err := json.Unmarshal(jsonBytes, &chatResponse)
 	return chatResponse, err
 }
+
+// DecodeAudioTranscriptionResponse decodes a response from the audio transcription endpoint
+func DecodeAudioTranscriptionResponse(body io.Reader) (AudioTranscriptionResponse, error) {
+	var audioTranscriptionResponse AudioTranscriptionResponse
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(body)
+	jsonBytes := buf.Bytes()
+	err := json.Unmarshal(jsonBytes, &audioTranscriptionResponse)
+	return audioTranscriptionResponse, err
+}

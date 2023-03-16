@@ -79,3 +79,8 @@ type ChatResponse struct {
 	Choices []ChatResponseChoice `json:"choices"`
 	Usage   Usage                `json:"usage"`
 }
+
+// AudioTranscriptionResponse response for a transcription request
+type AudioTranscriptionResponse struct {
+	Text string `json:"text"`
+}

@@ -86,3 +86,20 @@ func TestCreateChat(t *testing.T) {
 		t.Errorf("Expected chat choices to be 1, got %d", len(chat.Choices))
 	}
 }
+
+func TestCreateTranscription(t *testing.T) {
+	openai := NewOpenAI(&OpenAIOpts{})
+	// load the file from disk. Should be a byte array
+	// file is located at test_files/audio.mp3
+	file, err := os.ReadFile("test_files/audio.mp3")
+	if err != nil {
+		t.Errorf("Expected no error, got %s", err)
+	}
+	transcriptionResponse, err := openai.CreateTranscription(file, "audio.mp3")
+	if err != nil {
+		t.Errorf("Expected no error, got %s", err)
+	}
+	if transcriptionResponse.Text == "" {
+		t.Errorf("Expected transcription to be set, got %s", transcriptionResponse.Text)
+	}
+}

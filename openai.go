@@ -1,7 +1,9 @@
 package goopenai
 
 import (
+	"bytes"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"os"
 
@@ -56,6 +58,8 @@ func (o *OpenAI) ListModels() (types.ModelsResponse, error) {
 		return types.ModelsResponse{}, err
 	}
 
+	defer resp.Body.Close()
+
 	return types.DecodeModelsResponse(resp.Body)
 }
 
@@ -75,6 +79,8 @@ func (o *OpenAI) CreateCompletion(completionRequest *types.CompletionRequest) (t
 	if err != nil {
 		return types.CompletionResponse{}, err
 	}
+
+	defer resp.Body.Close()
 
 	return types.DecodeCompletionResponse(resp.Body)
 }
@@ -96,6 +102,8 @@ func (o *OpenAI) CreateEdit(editRequest *types.EditRequest) (types.EditResponse,
 		return types.EditResponse{}, err
 	}
 
+	defer resp.Body.Close()
+
 	return types.DecodeEditResponse(resp.Body)
 }
 
@@ -115,6 +123,8 @@ func (o *OpenAI) CreateImage(imageRequest *types.ImageRequest) (types.ImageRespo
 	if err != nil {
 		return types.ImageResponse{}, err
 	}
+
+	defer resp.Body.Close()
 
 	return types.DecodeImageResponse(resp.Body)
 }
@@ -152,6 +162,8 @@ func (o *OpenAI) CreateChat(chatRequest *types.ChatRequest) (types.ChatResponse,
 		return types.ChatResponse{}, err
 	}
 
+	defer resp.Body.Close()
+
 	return types.DecodeChatResponse(resp.Body)
 }
 
@@ -164,4 +176,47 @@ func (o *OpenAI) CreateChatSimple(prompt string, maxTokens int) (types.ChatRespo
 	}
 
 	return o.CreateChat(chatRequest)
+}
+
+func (o *OpenAI) CreateTranscription(file []byte, filename string) (types.AudioTranscriptionResponse, error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+
+	part, err := writer.CreateFormFile("file", filename)
+	if err != nil {
+		return types.AudioTranscriptionResponse{}, err
+	}
+
+	_, err = part.Write(file)
+	if err != nil {
+		return types.AudioTranscriptionResponse{}, err
+	}
+
+	err = writer.WriteField("model", "whisper-1")
+	if err != nil {
+		return types.AudioTranscriptionResponse{}, err
+	}
+
+	err = writer.Close()
+	if err != nil {
+		return types.AudioTranscriptionResponse{}, err
+	}
+
+	// didn't do newRequest because it doesn't support multipart
+	req, err := http.NewRequest("POST", "https://api.openai.com/v1/audio/transcriptions", body)
+	if err != nil {
+		return types.AudioTranscriptionResponse{}, err
+	}
+
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	req.Header.Set("Authorization", "Bearer "+o.APIKey)
+
+	resp, err := o.Client.Do(req)
+	if err != nil {
+		return types.AudioTranscriptionResponse{}, err
+	}
+
+	defer resp.Body.Close()
+
+	return types.DecodeAudioTranscriptionResponse(resp.Body)
 }
